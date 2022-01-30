@@ -1,0 +1,82 @@
+{
+    "sourceFile": "src/lesson2/parser.test.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 16,
+            "patches": [
+                {
+                    "date": 1643466801033,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1643466884524,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,6 @@\n import { parser } from \"./parser\";\n \n-describe(\"Parser baskets\", () => {\n-  it(\"(1 + 32)\", () => {\n-    expect(parser(\"(1 + 32)\")).toEqual([\"(\", 1, \"+\", 32, \")\"]);\n-  });\n-\n describe(\"Parser correct cases\", () => {\n   it(\"1 + 32\", () => {\n     expect(parser(\"1 + 32\")).toEqual([1, \"+\", 32]);\n   });\n"
+                },
+                {
+                    "date": 1643485627495,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,21 @@\n import { parser } from \"./parser\";\n \n+//( 12 + ( 1 + ( 2 - 3 ) * 4 ) + ( 5 * 6 ) ) + 12 * ( 2 + 1 )\n+describe(\"Parser brackets\", () => {\n+  it(\"1 + 32\", () => {\n+    expect(parser(\"1 + 32\")).toEqual([1, \"+\", 32]);\n+  });\n+\n+  it(\"11 + 3 * 22\", () => {\n+    expect(parser(\"11 + 3 * 22\")).toEqual([11, \"+\", 3, \"*\", 22]);\n+  });\n+\n+  it(\"1 + 32 - 2 + 2\", () => {\n+    expect(parser(\"1 + 32 - 2 + 2\")).toEqual([1, \"+\", 32, \"-\", 2, \"+\", 2]);\n+  });\n+});\n+\n describe(\"Parser correct cases\", () => {\n   it(\"1 + 32\", () => {\n     expect(parser(\"1 + 32\")).toEqual([1, \"+\", 32]);\n   });\n"
+                },
+                {
+                    "date": 1643485664539,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,19 +1,12 @@\n import { parser } from \"./parser\";\n \n-//( 12 + ( 1 + ( 2 - 3 ) * 4 ) + ( 5 * 6 ) ) + 12 * ( 2 + 1 )\n describe(\"Parser brackets\", () => {\n-  it(\"1 + 32\", () => {\n-    expect(parser(\"1 + 32\")).toEqual([1, \"+\", 32]);\n+  it(\"( 12 + ( 1 + ( 2 - 3 ) * 4 ) + ( 5 * 6 ) ) + 12 * ( 2 + 1 )\", () => {\n+    expect(\n+      parser(\"( 12 + ( 1 + ( 2 - 3 ) * 4 ) + ( 5 * 6 ) ) + 12 * ( 2 + 1 )\")\n+    ).toEqual([1, \"+\", 32]);\n   });\n-\n-  it(\"11 + 3 * 22\", () => {\n-    expect(parser(\"11 + 3 * 22\")).toEqual([11, \"+\", 3, \"*\", 22]);\n-  });\n-\n-  it(\"1 + 32 - 2 + 2\", () => {\n-    expect(parser(\"1 + 32 - 2 + 2\")).toEqual([1, \"+\", 32, \"-\", 2, \"+\", 2]);\n-  });\n });\n \n describe(\"Parser correct cases\", () => {\n   it(\"1 + 32\", () => {\n"
+                },
+                {
+                    "date": 1643486429961,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,15 @@\n describe(\"Parser brackets\", () => {\n   it(\"( 12 + ( 1 + ( 2 - 3 ) * 4 ) + ( 5 * 6 ) ) + 12 * ( 2 + 1 )\", () => {\n     expect(\n       parser(\"( 12 + ( 1 + ( 2 - 3 ) * 4 ) + ( 5 * 6 ) ) + 12 * ( 2 + 1 )\")\n-    ).toEqual([1, \"+\", 32]);\n+    ).toEqual([\n+      \"12 + ( 1 + ( 2 - 3 ) * 4 ) + ( 5 * 6 )\",\n+      \"+\",\n+      12,\n+      \"*\",\n+      \"2 + 1\",\n+    ]);\n   });\n });\n \n describe(\"Parser correct cases\", () => {\n"
+                },
+                {
+                    "date": 1643488935452,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,8 +25,22 @@\n \n   it(\"1 + 32 - 2 + 2\", () => {\n     expect(parser(\"1 + 32 - 2 + 2\")).toEqual([1, \"+\", 32, \"-\", 2, \"+\", 2]);\n   });\n+\n+  it(\"3 ^ 5 + 11 - 12 * 22\", () => {\n+    expect(parser(\"3 ^ 5 + 11 - 12 * 22\")).toEqual([\n+      3,\n+      \"^\",\n+      5,\n+      \"+\",\n+      11,\n+      \"-\",\n+      12,\n+      \"*\",\n+      22,\n+    ]);\n+  });\n });\n \n describe(\"Parser invalid cases\", () => {\n   it(\"1 + + 33 - 2\", () => {\n"
+                },
+                {
+                    "date": 1643548384278,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -39,8 +39,11 @@\n       \"*\",\n       22,\n     ]);\n   });\n+  it(\"2 **\", () => {\n+    expect(parser(\"2 **\")).toEqual([2, \"**\"]);\n+  });\n });\n \n describe(\"Parser invalid cases\", () => {\n   it(\"1 + + 33 - 2\", () => {\n"
+                },
+                {
+                    "date": 1643549896282,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -42,8 +42,14 @@\n   });\n   it(\"2 **\", () => {\n     expect(parser(\"2 **\")).toEqual([2, \"**\"]);\n   });\n+  it(\"1 + ! 33 - 2\", () => {\n+    expect(() => parser(\"1 + ! 33 - 2\")).toThrow(TypeError(\"Unexpected string\"));\n+  });\n+  it(\"! 10\", () => {\n+    expect(() => parser(\"1 + ! 33 - 2\")).toThrow(TypeError(\"Unexpected string\"));\n+  });\n });\n \n describe(\"Parser invalid cases\", () => {\n   it(\"1 + + 33 - 2\", () => {\n@@ -54,5 +60,8 @@\n \n   it(\"1 ! 33 - 2\", () => {\n     expect(() => parser(\"1 ! 33 - 2\")).toThrow(TypeError(\"Unexpected string\"));\n   });\n+  it(\"! ! 10\", () => {\n+    expect(() => parser(\"1 + ! 33 - 2\")).toThrow(TypeError(\"Unexpected string\"));\n+  });\n });\n"
+                },
+                {
+                    "date": 1643549917160,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,12 +43,14 @@\n   it(\"2 **\", () => {\n     expect(parser(\"2 **\")).toEqual([2, \"**\"]);\n   });\n   it(\"1 + ! 33 - 2\", () => {\n-    expect(() => parser(\"1 + ! 33 - 2\")).toThrow(TypeError(\"Unexpected string\"));\n+    expect(() => parser(\"1 + ! 33 - 2\")).toThrow(\n+      TypeError(\"Unexpected string\")\n+    );\n   });\n   it(\"! 10\", () => {\n-    expect(() => parser(\"1 + ! 33 - 2\")).toThrow(TypeError(\"Unexpected string\"));\n+    expect(() => parser(\"! 30\")).toThrow(TypeError(\"Unexpected string\"));\n   });\n });\n \n describe(\"Parser invalid cases\", () => {\n"
+                },
+                {
+                    "date": 1643549940483,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -63,7 +63,10 @@\n   it(\"1 ! 33 - 2\", () => {\n     expect(() => parser(\"1 ! 33 - 2\")).toThrow(TypeError(\"Unexpected string\"));\n   });\n   it(\"! ! 10\", () => {\n-    expect(() => parser(\"1 + ! 33 - 2\")).toThrow(TypeError(\"Unexpected string\"));\n+    expect(() => parser(\"! ! 10\")).toThrow(TypeError(\"Unexpected string\"));\n   });\n+  it(\"+ ! 10\", () => {\n+    expect(() => parser(\"+ ! 10\")).toThrow(TypeError(\"Unexpected string\"));\n+  });\n });\n"
+                },
+                {
+                    "date": 1643549976652,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -48,9 +48,9 @@\n       TypeError(\"Unexpected string\")\n     );\n   });\n   it(\"! 10\", () => {\n-    expect(() => parser(\"! 30\")).toThrow(TypeError(\"Unexpected string\"));\n+    expect(() => parser(\"! 10\")).toThrow(TypeError(\"Unexpected string\"));\n   });\n });\n \n describe(\"Parser invalid cases\", () => {\n"
+                },
+                {
+                    "date": 1643550194352,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,14 +43,12 @@\n   it(\"2 **\", () => {\n     expect(parser(\"2 **\")).toEqual([2, \"**\"]);\n   });\n   it(\"1 + ! 33 - 2\", () => {\n-    expect(() => parser(\"1 + ! 33 - 2\")).toThrow(\n-      TypeError(\"Unexpected string\")\n-    );\n+    expect(() => parser(\"1 + ! 33 - 2\")).toEqual(1, \"+\", \"!\", 33, \"-\", 2);\n   });\n   it(\"! 10\", () => {\n-    expect(() => parser(\"! 10\")).toThrow(TypeError(\"Unexpected string\"));\n+    expect(() => parser(\"! 10\")).toEqual(\"!\", 10);\n   });\n });\n \n describe(\"Parser invalid cases\", () => {\n"
+                },
+                {
+                    "date": 1643550383449,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,12 +43,12 @@\n   it(\"2 **\", () => {\n     expect(parser(\"2 **\")).toEqual([2, \"**\"]);\n   });\n   it(\"1 + ! 33 - 2\", () => {\n-    expect(() => parser(\"1 + ! 33 - 2\")).toEqual(1, \"+\", \"!\", 33, \"-\", 2);\n+    expect(parser(\"1 + ! 33 - 2\")).toEqual([1, \"+\", \"!\", 33, \"-\", 2)];\n   });\n   it(\"! 10\", () => {\n-    expect(() => parser(\"! 10\")).toEqual(\"!\", 10);\n+    expect(parser(\"! 10\")).toEqual([\"!\", 10]);\n   });\n });\n \n describe(\"Parser invalid cases\", () => {\n"
+                },
+                {
+                    "date": 1643550423226,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,9 +43,9 @@\n   it(\"2 **\", () => {\n     expect(parser(\"2 **\")).toEqual([2, \"**\"]);\n   });\n   it(\"1 + ! 33 - 2\", () => {\n-    expect(parser(\"1 + ! 33 - 2\")).toEqual([1, \"+\", \"!\", 33, \"-\", 2)];\n+    expect(parser(\"1 + ! 33 - 2\")).toEqual([1, \"+\", \"!\", 33, \"-\", 2]);\n   });\n   it(\"! 10\", () => {\n     expect(parser(\"! 10\")).toEqual([\"!\", 10]);\n   });\n"
+                },
+                {
+                    "date": 1643551617336,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -40,9 +40,9 @@\n       22,\n     ]);\n   });\n   it(\"2 **\", () => {\n-    expect(parser(\"2 **\")).toEqual([2, \"**\"]);\n+    expect(parser(\"2 **\")).toEqual([2, \"^\", 2]);\n   });\n   it(\"1 + ! 33 - 2\", () => {\n     expect(parser(\"1 + ! 33 - 2\")).toEqual([1, \"+\", \"!\", 33, \"-\", 2]);\n   });\n"
+                },
+                {
+                    "date": 1643552622909,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -40,9 +40,9 @@\n       22,\n     ]);\n   });\n   it(\"2 **\", () => {\n-    expect(parser(\"2 **\")).toEqual([2, \"^\", 2]);\n+    expect(parser(\"2 **\")).toEqual([2, \"**\"]);\n   });\n   it(\"1 + ! 33 - 2\", () => {\n     expect(parser(\"1 + ! 33 - 2\")).toEqual([1, \"+\", \"!\", 33, \"-\", 2]);\n   });\n"
+                },
+                {
+                    "date": 1643552932907,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -40,9 +40,9 @@\n       22,\n     ]);\n   });\n   it(\"2 **\", () => {\n-    expect(parser(\"2 **\")).toEqual([2, \"**\"]);\n+    expect(parser(\"2 **\")).toEqual([2, \"^\", 2]);\n   });\n   it(\"1 + ! 33 - 2\", () => {\n     expect(parser(\"1 + ! 33 - 2\")).toEqual([1, \"+\", \"!\", 33, \"-\", 2]);\n   });\n"
+                }
+            ],
+            "date": 1643466801033,
+            "name": "Commit-0",
+            "content": "import { parser } from \"./parser\";\n\ndescribe(\"Parser baskets\", () => {\n  it(\"(1 + 32)\", () => {\n    expect(parser(\"(1 + 32)\")).toEqual([\"(\", 1, \"+\", 32, \")\"]);\n  });\n\ndescribe(\"Parser correct cases\", () => {\n  it(\"1 + 32\", () => {\n    expect(parser(\"1 + 32\")).toEqual([1, \"+\", 32]);\n  });\n\n  it(\"11 + 3 * 22\", () => {\n    expect(parser(\"11 + 3 * 22\")).toEqual([11, \"+\", 3, \"*\", 22]);\n  });\n\n  it(\"1 + 32 - 2 + 2\", () => {\n    expect(parser(\"1 + 32 - 2 + 2\")).toEqual([1, \"+\", 32, \"-\", 2, \"+\", 2]);\n  });\n});\n\ndescribe(\"Parser invalid cases\", () => {\n  it(\"1 + + 33 - 2\", () => {\n    expect(() => parser(\"1 + + 33 - 2\")).toThrow(\n      TypeError(\"Unexpected string\")\n    );\n  });\n\n  it(\"1 ! 33 - 2\", () => {\n    expect(() => parser(\"1 ! 33 - 2\")).toThrow(TypeError(\"Unexpected string\"));\n  });\n});\n"
+        }
+    ]
+}

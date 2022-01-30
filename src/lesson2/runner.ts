@@ -1,6 +1,18 @@
-import { parser } from "./parser";
+import { ParsedLineType, parser } from "./parser";
+import { mathOperators } from "./mathOperators";
 
-import { firstPrioritiesCalc, secondPrioritiesCalc } from "./engine";
+import { lastPrioritiesCalc, priorityCalc } from "./engine";
+
+const ResolveStack = (stack: ParsedLineType): number => {
+  const firstPrioritiesRes = priorityCalc(stack, 1);
+  if (firstPrioritiesRes.length === 1) {
+    return Number(firstPrioritiesRes[0]);
+  }
+
+  return lastPrioritiesCalc(
+    priorityCalc(priorityCalc(firstPrioritiesRes, 2), 3)
+  );
+};
 
 export const runner = (line: string): number => {
   const stack = parser(line);
@@ -9,11 +21,12 @@ export const runner = (line: string): number => {
     throw new TypeError("Unexpected string");
   }
 
-  const firstPrioritiesRes = firstPrioritiesCalc(stack);
+  stack.forEach(function (element, i) {
+    if (!(mathOperators.hasOwnProperty(element) || !isNaN(Number(element)))) {
+      //Calc if expression
+      stack[i] = runner(String(element));
+    }
+  });
 
-  if (firstPrioritiesRes.length === 1) {
-    return Number(firstPrioritiesRes[0]);
-  }
-
-  return secondPrioritiesCalc(firstPrioritiesRes);
+  return ResolveStack(stack);
 };

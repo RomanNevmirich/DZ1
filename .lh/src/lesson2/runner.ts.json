@@ -1,0 +1,102 @@
+{
+    "sourceFile": "src/lesson2/runner.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 21,
+            "patches": [
+                {
+                    "date": 1643488030202,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1643488331849,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,12 @@\n \n   stack.forEach(function (element, i, arr) {\n     if (!(mathOperators.hasOwnProperty(element) || !isNaN(Number(element)))) {\n       const estack = parser(String(element));\n-      //stack[i] = ResolveStack((estack));\n+      if (estack === null) {\n+        throw new TypeError(\"Unexpected string\");\n+      }\n+      element = ResolveStack(estack);\n     }\n   });\n \n   return ResolveStack(stack);\n"
+                },
+                {
+                    "date": 1643488709508,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n       const estack = parser(String(element));\n       if (estack === null) {\n         throw new TypeError(\"Unexpected string\");\n       }\n-      element = ResolveStack(estack);\n+      stack[i] = ResolveStack(estack);\n     }\n   });\n \n   return ResolveStack(stack);\n"
+                },
+                {
+                    "date": 1643488789693,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n   if (stack === null) {\n     throw new TypeError(\"Unexpected string\");\n   }\n \n-  stack.forEach(function (element, i, arr) {\n+  stack.forEach(function (element, i) {\n     if (!(mathOperators.hasOwnProperty(element) || !isNaN(Number(element)))) {\n       const estack = parser(String(element));\n       if (estack === null) {\n         throw new TypeError(\"Unexpected string\");\n"
+                },
+                {
+                    "date": 1643546973903,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n   if (firstPrioritiesRes.length === 1) {\n     return Number(firstPrioritiesRes[0]);\n   }\n \n-  return secondPrioritiesCalc(firstPrioritiesRes);\n+  return fourthPrioritiesCalc(firstPrioritiesRes);\n };\n \n export const runner = (line: string): number => {\n   const stack = parser(line);\n"
+                },
+                {
+                    "date": 1643546991068,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import { ParsedLineType, parser } from \"./parser\";\n import { mathOperators } from \"./mathOperators\";\n \n-import { firstPrioritiesCalc, secondPrioritiesCalc } from \"./engine\";\n+import { firstPrioritiesCalc, secondPrioritiesCalc, thirdPrioritiesCalc, fourthPrioritiesCalc } from \"./engine\";\n \n const ResolveStack = (stack: ParsedLineType): number => {\n   const firstPrioritiesRes = firstPrioritiesCalc(stack);\n \n"
+                },
+                {
+                    "date": 1643547042814,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,15 +3,15 @@\n \n import { firstPrioritiesCalc, secondPrioritiesCalc, thirdPrioritiesCalc, fourthPrioritiesCalc } from \"./engine\";\n \n const ResolveStack = (stack: ParsedLineType): number => {\n-  const firstPrioritiesRes = firstPrioritiesCalc(stack);\n+  const thirdPrioritiesRes = thirdPrioritiesCalc(stack);\n \n-  if (firstPrioritiesRes.length === 1) {\n-    return Number(firstPrioritiesRes[0]);\n+  if (thirdPrioritiesRes.length === 1) {\n+    return Number(thirdPrioritiesRes[0]);\n   }\n \n-  return fourthPrioritiesCalc(firstPrioritiesRes);\n+  return fourthPrioritiesCalc(thirdPrioritiesRes);\n };\n \n export const runner = (line: string): number => {\n   const stack = parser(line);\n"
+                },
+                {
+                    "date": 1643547191764,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,11 @@\n import { ParsedLineType, parser } from \"./parser\";\n import { mathOperators } from \"./mathOperators\";\n \n-import { firstPrioritiesCalc, secondPrioritiesCalc, thirdPrioritiesCalc, fourthPrioritiesCalc } from \"./engine\";\n+import {\n+  /*firstPrioritiesCalc, secondPrioritiesCalc,*/ thirdPrioritiesCalc,\n+  fourthPrioritiesCalc,\n+} from \"./engine\";\n \n const ResolveStack = (stack: ParsedLineType): number => {\n   const thirdPrioritiesRes = thirdPrioritiesCalc(stack);\n \n"
+                },
+                {
+                    "date": 1643547674506,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,18 +1,24 @@\n import { ParsedLineType, parser } from \"./parser\";\n import { mathOperators } from \"./mathOperators\";\n \n import {\n-  /*firstPrioritiesCalc, secondPrioritiesCalc,*/ thirdPrioritiesCalc,\n+  firstPrioritiesCalc,\n+  /*secondPrioritiesCalc,*/ thirdPrioritiesCalc,\n   fourthPrioritiesCalc,\n } from \"./engine\";\n \n const ResolveStack = (stack: ParsedLineType): number => {\n-  const thirdPrioritiesRes = thirdPrioritiesCalc(stack);\n+  const firstPrioritiesRes = firstPrioritiesCalc(stack);\n+  if (firstPrioritiesRes.length === 1) {\n+    return Number(firstPrioritiesRes[0]);\n+  }\n \n-  if (thirdPrioritiesRes.length === 1) {\n+  const thirdPrioritiesRes = thirdPrioritiesCalc(firstPrioritiesRes);\n+\n+  /*if (thirdPrioritiesRes.length === 1) {\n     return Number(thirdPrioritiesRes[0]);\n-  }\n+  }*/\n \n   return fourthPrioritiesCalc(thirdPrioritiesRes);\n };\n \n"
+                },
+                {
+                    "date": 1643548636675,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,9 @@\n   return fourthPrioritiesCalc(thirdPrioritiesRes);\n };\n \n export const runner = (line: string): number => {\n-  const stack = parser(line);\n+  const stack = parser(line.replace(\"**\", \"^ 2\"));\n \n   if (stack === null) {\n     throw new TypeError(\"Unexpected string\");\n   }\n"
+                },
+                {
+                    "date": 1643551146923,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,10 @@\n import { mathOperators } from \"./mathOperators\";\n \n import {\n   firstPrioritiesCalc,\n-  /*secondPrioritiesCalc,*/ thirdPrioritiesCalc,\n+  secondPrioritiesCalc,\n+  thirdPrioritiesCalc,\n   fourthPrioritiesCalc,\n } from \"./engine\";\n \n const ResolveStack = (stack: ParsedLineType): number => {\n@@ -12,14 +13,11 @@\n   if (firstPrioritiesRes.length === 1) {\n     return Number(firstPrioritiesRes[0]);\n   }\n \n-  const thirdPrioritiesRes = thirdPrioritiesCalc(firstPrioritiesRes);\n+  const secondPrioritiesRes = secondPrioritiesCalc(firstPrioritiesRes);\n+  const thirdPrioritiesRes = thirdPrioritiesCalc(secondPrioritiesRes);\n \n-  /*if (thirdPrioritiesRes.length === 1) {\n-    return Number(thirdPrioritiesRes[0]);\n-  }*/\n-\n   return fourthPrioritiesCalc(thirdPrioritiesRes);\n };\n \n export const runner = (line: string): number => {\n"
+                },
+                {
+                    "date": 1643551962857,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -28,9 +28,9 @@\n   }\n \n   stack.forEach(function (element, i) {\n     if (!(mathOperators.hasOwnProperty(element) || !isNaN(Number(element)))) {\n-      const estack = parser(String(element));\n+      const estack = parser(String(element).replace(\"**\", \"^ 2\"));\n       if (estack === null) {\n         throw new TypeError(\"Unexpected string\");\n       }\n       stack[i] = ResolveStack(estack);\n"
+                },
+                {
+                    "date": 1643552518840,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,8 +19,12 @@\n \n   return fourthPrioritiesCalc(thirdPrioritiesRes);\n };\n \n+/*const midRunner = (line: string): number => {\n+\n+}*/\n+\n export const runner = (line: string): number => {\n   const stack = parser(line.replace(\"**\", \"^ 2\"));\n \n   if (stack === null) {\n@@ -28,13 +32,13 @@\n   }\n \n   stack.forEach(function (element, i) {\n     if (!(mathOperators.hasOwnProperty(element) || !isNaN(Number(element)))) {\n-      const estack = parser(String(element).replace(\"**\", \"^ 2\"));\n+      /*const estack = parser(String(element).replace(\"**\", \"^ 2\"));\n       if (estack === null) {\n         throw new TypeError(\"Unexpected string\");\n-      }\n-      stack[i] = ResolveStack(estack);\n+      }*/\n+      stack[i] = runner(String(element));\n     }\n   });\n \n   return ResolveStack(stack);\n"
+                },
+                {
+                    "date": 1643552915403,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,17 +24,17 @@\n \n }*/\n \n export const runner = (line: string): number => {\n-  const stack = parser(line.replace(\"**\", \"^ 2\"));\n+  const stack = parser(line);\n \n   if (stack === null) {\n     throw new TypeError(\"Unexpected string\");\n   }\n \n   stack.forEach(function (element, i) {\n     if (!(mathOperators.hasOwnProperty(element) || !isNaN(Number(element)))) {\n-      /*const estack = parser(String(element).replace(\"**\", \"^ 2\"));\n+      /*const estack = parser(String(element));\n       if (estack === null) {\n         throw new TypeError(\"Unexpected string\");\n       }*/\n       stack[i] = runner(String(element));\n"
+                },
+                {
+                    "date": 1643553158717,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,12 +19,8 @@\n \n   return fourthPrioritiesCalc(thirdPrioritiesRes);\n };\n \n-/*const midRunner = (line: string): number => {\n-\n-}*/\n-\n export const runner = (line: string): number => {\n   const stack = parser(line);\n \n   if (stack === null) {\n@@ -32,12 +28,9 @@\n   }\n \n   stack.forEach(function (element, i) {\n     if (!(mathOperators.hasOwnProperty(element) || !isNaN(Number(element)))) {\n-      /*const estack = parser(String(element));\n-      if (estack === null) {\n-        throw new TypeError(\"Unexpected string\");\n-      }*/\n+      //Если внутри выражение, то вычисляем его\n       stack[i] = runner(String(element));\n     }\n   });\n \n"
+                },
+                {
+                    "date": 1643553181244,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -28,9 +28,9 @@\n   }\n \n   stack.forEach(function (element, i) {\n     if (!(mathOperators.hasOwnProperty(element) || !isNaN(Number(element)))) {\n-      //Если внутри выражение, то вычисляем его\n+      /*Если внутри выражение, то вычисляем его*/\n       stack[i] = runner(String(element));\n     }\n   });\n \n"
+                },
+                {
+                    "date": 1643553188776,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -28,9 +28,9 @@\n   }\n \n   stack.forEach(function (element, i) {\n     if (!(mathOperators.hasOwnProperty(element) || !isNaN(Number(element)))) {\n-      /*Если внутри выражение, то вычисляем его*/\n+      //Если внутри выражение, то вычисляем его\n       stack[i] = runner(String(element));\n     }\n   });\n \n"
+                },
+                {
+                    "date": 1643553203707,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -28,9 +28,9 @@\n   }\n \n   stack.forEach(function (element, i) {\n     if (!(mathOperators.hasOwnProperty(element) || !isNaN(Number(element)))) {\n-      //Если внутри выражение, то вычисляем его\n+      //Calc if expression\n       stack[i] = runner(String(element));\n     }\n   });\n \n"
+                },
+                {
+                    "date": 1643553246546,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,12 +13,11 @@\n   if (firstPrioritiesRes.length === 1) {\n     return Number(firstPrioritiesRes[0]);\n   }\n \n-  const secondPrioritiesRes = secondPrioritiesCalc(firstPrioritiesRes);\n-  const thirdPrioritiesRes = thirdPrioritiesCalc(secondPrioritiesRes);\n-\n-  return fourthPrioritiesCalc(thirdPrioritiesRes);\n+  return fourthPrioritiesCalc(\n+    thirdPrioritiesCalc(secondPrioritiesCalc(firstPrioritiesRes))\n+  );\n };\n \n export const runner = (line: string): number => {\n   const stack = parser(line);\n"
+                },
+                {
+                    "date": 1643553896090,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,18 +5,19 @@\n   firstPrioritiesCalc,\n   secondPrioritiesCalc,\n   thirdPrioritiesCalc,\n   fourthPrioritiesCalc,\n+  priorityCalc,\n } from \"./engine\";\n \n const ResolveStack = (stack: ParsedLineType): number => {\n-  const firstPrioritiesRes = firstPrioritiesCalc(stack);\n+  const firstPrioritiesRes = priorityCalc(stack, 1);\n   if (firstPrioritiesRes.length === 1) {\n     return Number(firstPrioritiesRes[0]);\n   }\n \n   return fourthPrioritiesCalc(\n-    thirdPrioritiesCalc(secondPrioritiesCalc(firstPrioritiesRes))\n+    priorityCalc(priorityCalc(firstPrioritiesRes, 2), 3)\n   );\n };\n \n export const runner = (line: string): number => {\n"
+                },
+                {
+                    "date": 1643553930412,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,14 +1,8 @@\n import { ParsedLineType, parser } from \"./parser\";\n import { mathOperators } from \"./mathOperators\";\n \n-import {\n-  firstPrioritiesCalc,\n-  secondPrioritiesCalc,\n-  thirdPrioritiesCalc,\n-  fourthPrioritiesCalc,\n-  priorityCalc,\n-} from \"./engine\";\n+import { fourthPrioritiesCalc, priorityCalc } from \"./engine\";\n \n const ResolveStack = (stack: ParsedLineType): number => {\n   const firstPrioritiesRes = priorityCalc(stack, 1);\n   if (firstPrioritiesRes.length === 1) {\n"
+                },
+                {
+                    "date": 1643553942366,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,16 +1,16 @@\n import { ParsedLineType, parser } from \"./parser\";\n import { mathOperators } from \"./mathOperators\";\n \n-import { fourthPrioritiesCalc, priorityCalc } from \"./engine\";\n+import { lastPrioritiesCalc, priorityCalc } from \"./engine\";\n \n const ResolveStack = (stack: ParsedLineType): number => {\n   const firstPrioritiesRes = priorityCalc(stack, 1);\n   if (firstPrioritiesRes.length === 1) {\n     return Number(firstPrioritiesRes[0]);\n   }\n \n-  return fourthPrioritiesCalc(\n+  return lastPrioritiesCalc(\n     priorityCalc(priorityCalc(firstPrioritiesRes, 2), 3)\n   );\n };\n \n"
+                }
+            ],
+            "date": 1643488030202,
+            "name": "Commit-0",
+            "content": "import { ParsedLineType, parser } from \"./parser\";\nimport { mathOperators } from \"./mathOperators\";\n\nimport { firstPrioritiesCalc, secondPrioritiesCalc } from \"./engine\";\n\nconst ResolveStack = (stack: ParsedLineType): number => {\n  const firstPrioritiesRes = firstPrioritiesCalc(stack);\n\n  if (firstPrioritiesRes.length === 1) {\n    return Number(firstPrioritiesRes[0]);\n  }\n\n  return secondPrioritiesCalc(firstPrioritiesRes);\n};\n\nexport const runner = (line: string): number => {\n  const stack = parser(line);\n\n  if (stack === null) {\n    throw new TypeError(\"Unexpected string\");\n  }\n\n  stack.forEach(function (element, i, arr) {\n    if (!(mathOperators.hasOwnProperty(element) || !isNaN(Number(element)))) {\n      const estack = parser(String(element));\n      //stack[i] = ResolveStack((estack));\n    }\n  });\n\n  return ResolveStack(stack);\n};\n"
+        }
+    ]
+}
