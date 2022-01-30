@@ -1,0 +1,50 @@
+{
+    "sourceFile": "src/lesson2/helpers.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 8,
+            "patches": [
+                {
+                    "date": 1643470637008,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1643470667894,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,2 +1,2 @@\n export const isNumber = (item: string): boolean => !isNaN(Number(item));\n-export const isBasket = (item: string): boolean => item == \"(\" || item == \")\";\n\\ No newline at end of file\n+export const isBasket = (item: string): boolean => item === \"(\" || item === \")\";\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1643470686087,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,2 +1,2 @@\n export const isNumber = (item: string): boolean => !isNaN(Number(item));\n-export const isBasket = (item: string): boolean => item === \"(\" || item === \")\";\n\\ No newline at end of file\n+export const isBasket = (item: string): boolean => item === \"(\" || item === \")\";\n"
+                },
+                {
+                    "date": 1643470731367,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,2 +1,1 @@\n export const isNumber = (item: string): boolean => !isNaN(Number(item));\n-export const isBasket = (item: string): boolean => item === \"(\" || item === \")\";\n"
+                },
+                {
+                    "date": 1643474097242,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,2 @@\n export const isNumber = (item: string): boolean => !isNaN(Number(item));\n+export const isBasket = (item: string): boolean => item == \"(\" || item == \")\";\n"
+                },
+                {
+                    "date": 1643482725059,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,2 +1,2 @@\n export const isNumber = (item: string): boolean => !isNaN(Number(item));\n-export const isBasket = (item: string): boolean => item == \"(\" || item == \")\";\n+export const isOpenBasket = (item: string): boolean => item == \"(\";\n"
+                },
+                {
+                    "date": 1643483748668,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,2 +1,2 @@\n export const isNumber = (item: string): boolean => !isNaN(Number(item));\n-export const isOpenBasket = (item: string): boolean => item == \"(\";\n+export const isOpenBracket = (item: string): boolean => item == \"(\";\n"
+                },
+                {
+                    "date": 1643486257374,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,2 +1,3 @@\n export const isNumber = (item: string): boolean => !isNaN(Number(item));\n export const isOpenBracket = (item: string): boolean => item == \"(\";\n+export const isCloseBracket = (item: string): boolean => item == \")\";\n"
+                },
+                {
+                    "date": 1643548798447,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,3 +1,4 @@\n export const isNumber = (item: string): boolean => !isNaN(Number(item));\n export const isOpenBracket = (item: string): boolean => item == \"(\";\n export const isCloseBracket = (item: string): boolean => item == \")\";\n+export const isFactorial = (item: string): boolean => item == \"!\";\n"
+                }
+            ],
+            "date": 1643470637008,
+            "name": "Commit-0",
+            "content": "export const isNumber = (item: string): boolean => !isNaN(Number(item));\nexport const isBasket = (item: string): boolean => item == \"(\" || item == \")\";"
+        }
+    ]
+}

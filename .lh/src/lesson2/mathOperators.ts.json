@@ -1,0 +1,78 @@
+{
+    "sourceFile": "src/lesson2/mathOperators.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 15,
+            "patches": [
+                {
+                    "date": 1643471060295,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1643471071484,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,7 +37,8 @@\n \n export const mathOperatorsPriorities: { [key: string]: number } = {\n   \"*\": FIRST,\n   \"/\": FIRST,\n+  \"**\": FIRST,\n   \"+\": SECOND,\n   \"-\": SECOND,\n };\n"
+                },
+                {
+                    "date": 1643472217345,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,8 +4,13 @@\n   first: number,\n   second: number\n ): number => first * second;\n \n+export const pow: ScalarOperationType = (\n+  first: number,\n+  second: number\n+): number => first ^ second;\n+\n export const mul2: ScalarOperationType = (first: number): number =>\n   first * first;\n \n export const div: ScalarOperationType = (\n@@ -28,8 +33,9 @@\n   \"/\": div,\n   \"+\": add,\n   \"-\": minus,\n   \"**\": mul2,\n+  \"^\": pow,\n };\n \n export const mathPriorities: number[] = [1, 2];\n \n"
+                },
+                {
+                    "date": 1643472509676,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,6 @@\n export type ScalarOperationType = (first: number, second: number) => number;\n+export type Scalar1OperationType = (first: number) => number;\n \n export const mul: ScalarOperationType = (\n   first: number,\n   second: number\n@@ -12,8 +13,11 @@\n \n export const mul2: ScalarOperationType = (first: number): number =>\n   first * first;\n \n+export const fact: Scalar1OperationType = (first: number): number =>\n+  first > 1 ? first * fact(first - 1) : 1;\n+\n export const div: ScalarOperationType = (\n   first: number,\n   second: number\n ): number => first / second;\n@@ -34,8 +38,9 @@\n   \"+\": add,\n   \"-\": minus,\n   \"**\": mul2,\n   \"^\": pow,\n+  \"!\": fact,\n };\n \n export const mathPriorities: number[] = [1, 2];\n \n"
+                },
+                {
+                    "date": 1643472515170,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n   first: number,\n   second: number\n ): number => first ^ second;\n \n-export const mul2: ScalarOperationType = (first: number): number =>\n+export const mul2: Scalar1OperationType = (first: number): number =>\n   first * first;\n \n export const fact: Scalar1OperationType = (first: number): number =>\n   first > 1 ? first * fact(first - 1) : 1;\n"
+                },
+                {
+                    "date": 1643486927524,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -38,9 +38,9 @@\n   \"+\": add,\n   \"-\": minus,\n   \"**\": mul2,\n   \"^\": pow,\n-  \"!\": fact,\n+  //\"!\": fact,\n };\n \n export const mathPriorities: number[] = [1, 2];\n \n"
+                },
+                {
+                    "date": 1643489204199,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -43,13 +43,14 @@\n };\n \n export const mathPriorities: number[] = [1, 2];\n \n-const [FIRST, SECOND] = mathPriorities;\n+const [FIRST, SECOND, THIRD] = mathPriorities;\n \n export const mathOperatorsPriorities: { [key: string]: number } = {\n-  \"*\": FIRST,\n-  \"/\": FIRST,\n+  \"^\": FIRST,\n+  \"*\": SECOND,\n+  \"/\": SECOND,\n   \"**\": FIRST,\n-  \"+\": SECOND,\n-  \"-\": SECOND,\n+  \"+\": THIRD,\n+  \"-\": THIRD,\n };\n"
+                },
+                {
+                    "date": 1643546409469,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,9 +41,9 @@\n   \"^\": pow,\n   //\"!\": fact,\n };\n \n-export const mathPriorities: number[] = [1, 2];\n+export const mathPriorities: number[] = [1, 2, 3];\n \n const [FIRST, SECOND, THIRD] = mathPriorities;\n \n export const mathOperatorsPriorities: { [key: string]: number } = {\n"
+                },
+                {
+                    "date": 1643546882708,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,16 +41,17 @@\n   \"^\": pow,\n   //\"!\": fact,\n };\n \n-export const mathPriorities: number[] = [1, 2, 3];\n+export const mathPriorities: number[] = [1, 2, 3, 4];\n \n-const [FIRST, SECOND, THIRD] = mathPriorities;\n+const [FIRST, SECOND, THIRD, FOURTH] = mathPriorities;\n \n export const mathOperatorsPriorities: { [key: string]: number } = {\n   \"^\": FIRST,\n-  \"*\": SECOND,\n-  \"/\": SECOND,\n   \"**\": FIRST,\n-  \"+\": THIRD,\n-  \"-\": THIRD,\n+  \"!\": SECOND,\n+  \"*\": THIRD,\n+  \"/\": THIRD,\n+  \"+\": FOURTH,\n+  \"-\": FOURTH,\n };\n"
+                },
+                {
+                    "date": 1643548088839,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n \n export const pow: ScalarOperationType = (\n   first: number,\n   second: number\n-): number => first ^ second;\n+): number => Math.pow(first, second);\n \n export const mul2: Scalar1OperationType = (first: number): number =>\n   first * first;\n \n"
+                },
+                {
+                    "date": 1643548292857,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -38,9 +38,9 @@\n   \"+\": add,\n   \"-\": minus,\n   \"**\": mul2,\n   \"^\": pow,\n-  //\"!\": fact,\n+  \"!\": fact,\n };\n \n export const mathPriorities: number[] = [1, 2, 3, 4];\n \n"
+                },
+                {
+                    "date": 1643550787239,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,11 @@\n   first: number,\n   second: number\n ): number => first - second;\n \n-export const mathOperators: { [key: string]: ScalarOperationType } = {\n+export const mathOperators: {\n+  [key: string]: ScalarOperationType | Scalar1OperationType;\n+} = {\n   \"*\": mul,\n   \"/\": div,\n   \"+\": add,\n   \"-\": minus,\n"
+                },
+                {
+                    "date": 1643550995209,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,11 +10,8 @@\n   first: number,\n   second: number\n ): number => Math.pow(first, second);\n \n-export const mul2: Scalar1OperationType = (first: number): number =>\n-  first * first;\n-\n export const fact: Scalar1OperationType = (first: number): number =>\n   first > 1 ? first * fact(first - 1) : 1;\n \n export const div: ScalarOperationType = (\n@@ -38,9 +35,8 @@\n   \"*\": mul,\n   \"/\": div,\n   \"+\": add,\n   \"-\": minus,\n-  \"**\": mul2,\n   \"^\": pow,\n   \"!\": fact,\n };\n \n"
+                },
+                {
+                    "date": 1643552853553,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,8 +36,9 @@\n   \"/\": div,\n   \"+\": add,\n   \"-\": minus,\n   \"^\": pow,\n+  \"**\": pow,\n   \"!\": fact,\n };\n \n export const mathPriorities: number[] = [1, 2, 3, 4];\n"
+                },
+                {
+                    "date": 1643552957222,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,9 +36,8 @@\n   \"/\": div,\n   \"+\": add,\n   \"-\": minus,\n   \"^\": pow,\n-  \"**\": pow,\n   \"!\": fact,\n };\n \n export const mathPriorities: number[] = [1, 2, 3, 4];\n@@ -46,9 +45,8 @@\n const [FIRST, SECOND, THIRD, FOURTH] = mathPriorities;\n \n export const mathOperatorsPriorities: { [key: string]: number } = {\n   \"^\": FIRST,\n-  \"**\": FIRST,\n   \"!\": SECOND,\n   \"*\": THIRD,\n   \"/\": THIRD,\n   \"+\": FOURTH,\n"
+                },
+                {
+                    "date": 1643553644021,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -51,4 +51,8 @@\n   \"/\": THIRD,\n   \"+\": FOURTH,\n   \"-\": FOURTH,\n };\n+\n+export const mathOperatorsPostArg: { [key: string]: boolean } = {\n+  \"!\": true,\n+};\n"
+                }
+            ],
+            "date": 1643471060295,
+            "name": "Commit-0",
+            "content": "export type ScalarOperationType = (first: number, second: number) => number;\n\nexport const mul: ScalarOperationType = (\n  first: number,\n  second: number\n): number => first * second;\n\nexport const mul2: ScalarOperationType = (first: number): number =>\n  first * first;\n\nexport const div: ScalarOperationType = (\n  first: number,\n  second: number\n): number => first / second;\n\nexport const add: ScalarOperationType = (\n  first: number,\n  second: number\n): number => first + second;\n\nexport const minus: ScalarOperationType = (\n  first: number,\n  second: number\n): number => first - second;\n\nexport const mathOperators: { [key: string]: ScalarOperationType } = {\n  \"*\": mul,\n  \"/\": div,\n  \"+\": add,\n  \"-\": minus,\n  \"**\": mul2,\n};\n\nexport const mathPriorities: number[] = [1, 2];\n\nconst [FIRST, SECOND] = mathPriorities;\n\nexport const mathOperatorsPriorities: { [key: string]: number } = {\n  \"*\": FIRST,\n  \"/\": FIRST,\n  \"+\": SECOND,\n  \"-\": SECOND,\n};\n"
+        }
+    ]
+}

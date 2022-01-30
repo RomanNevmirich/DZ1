@@ -1,0 +1,86 @@
+{
+    "sourceFile": "src/lesson2/runner.test.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 17,
+            "patches": [
+                {
+                    "date": 1643467891847,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1643467978367,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,8 +3,9 @@\n describe(\"Baskets\", () => {\n   it(\"(1 + 32) * (3 + 8)\", () => {\n     expect(runner(\"1 * 32\")).toEqual(32);\n   });\n+});\n \n describe(\"Runner simple cases\", () => {\n   it(\"1 * 32\", () => {\n     expect(runner(\"1 * 32\")).toEqual(32);\n"
+                },
+                {
+                    "date": 1643468043122,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import { runner } from \"./runner\";\n \n describe(\"Baskets\", () => {\n   it(\"(1 + 32) * (3 + 8)\", () => {\n-    expect(runner(\"1 * 32\")).toEqual(32);\n+    expect(runner(\"(1 + 32) * (3 + 8)\")).toEqual(32);\n   });\n });\n \n describe(\"Runner simple cases\", () => {\n"
+                },
+                {
+                    "date": 1643470799133,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import { runner } from \"./runner\";\n-\n+/*\n describe(\"Baskets\", () => {\n   it(\"(1 + 32) * (3 + 8)\", () => {\n     expect(runner(\"(1 + 32) * (3 + 8)\")).toEqual(32);\n   });\n@@ -18,9 +18,9 @@\n   it(\"2 + 32\", () => {\n     expect(runner(\"2 + 32\")).toEqual(34);\n   });\n });\n-\n+*/\n describe(\"Runner tripled/mixed cases\", () => {\n   it(\"2 * 2 * 3\", () => {\n     expect(runner(\"2 * 2 * 3\")).toEqual(12);\n   });\n"
+                },
+                {
+                    "date": 1643480005516,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n describe(\"Baskets\", () => {\n   it(\"(1 + 32) * (3 + 8)\", () => {\n     expect(runner(\"(1 + 32) * (3 + 8)\")).toEqual(32);\n   });\n-});\n+});*/\n \n describe(\"Runner simple cases\", () => {\n   it(\"1 * 32\", () => {\n     expect(runner(\"1 * 32\")).toEqual(32);\n@@ -18,9 +18,9 @@\n   it(\"2 + 32\", () => {\n     expect(runner(\"2 + 32\")).toEqual(34);\n   });\n });\n-*/\n+\n describe(\"Runner tripled/mixed cases\", () => {\n   it(\"2 * 2 * 3\", () => {\n     expect(runner(\"2 * 2 * 3\")).toEqual(12);\n   });\n"
+                },
+                {
+                    "date": 1643488598840,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,11 @@\n import { runner } from \"./runner\";\n-/*\n-describe(\"Baskets\", () => {\n-  it(\"(1 + 32) * (3 + 8)\", () => {\n-    expect(runner(\"(1 + 32) * (3 + 8)\")).toEqual(32);\n+\n+describe(\"Brackets\", () => {\n+  it(\"( 1 + 32 ) * ( 3 + 8 )\", () => {\n+    expect(runner(\"( 1 + 32 ) * ( 3 + 8 )\")).toEqual(363);\n   });\n-});*/\n+});\n \n describe(\"Runner simple cases\", () => {\n   it(\"1 * 32\", () => {\n     expect(runner(\"1 * 32\")).toEqual(32);\n"
+                },
+                {
+                    "date": 1643488997348,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,8 +17,11 @@\n \n   it(\"2 + 32\", () => {\n     expect(runner(\"2 + 32\")).toEqual(34);\n   });\n+  it(\"2 + 32\", () => {\n+    expect(runner(\"2 + 32\")).toEqual(34);\n+  });\n });\n \n describe(\"Runner tripled/mixed cases\", () => {\n   it(\"2 * 2 * 3\", () => {\n"
+                },
+                {
+                    "date": 1643489030171,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,10 +17,10 @@\n \n   it(\"2 + 32\", () => {\n     expect(runner(\"2 + 32\")).toEqual(34);\n   });\n-  it(\"2 + 32\", () => {\n-    expect(runner(\"2 + 32\")).toEqual(34);\n+  it(\"2 ^ 10\", () => {\n+    expect(runner(\"2 ^ 10\")).toEqual(1024);\n   });\n });\n \n describe(\"Runner tripled/mixed cases\", () => {\n"
+                },
+                {
+                    "date": 1643548145523,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,8 +20,11 @@\n   });\n   it(\"2 ^ 10\", () => {\n     expect(runner(\"2 ^ 10\")).toEqual(1024);\n   });\n+  it(\"2 ^ 3 + 4\", () => {\n+    expect(runner(\"2 ^ 3 + 4\")).toEqual(12);\n+  });\n });\n \n describe(\"Runner tripled/mixed cases\", () => {\n   it(\"2 * 2 * 3\", () => {\n"
+                },
+                {
+                    "date": 1643548207246,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,10 +20,10 @@\n   });\n   it(\"2 ^ 10\", () => {\n     expect(runner(\"2 ^ 10\")).toEqual(1024);\n   });\n-  it(\"2 ^ 3 + 4\", () => {\n-    expect(runner(\"2 ^ 3 + 4\")).toEqual(12);\n+  it(\"2 ^ 3 + 4 ^ 2 * 2\", () => {\n+    expect(runner(\"2 ^ 3 + 4 ^ 2 * 2\")).toEqual(40);\n   });\n });\n \n describe(\"Runner tripled/mixed cases\", () => {\n"
+                },
+                {
+                    "date": 1643548423713,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,11 +20,8 @@\n   });\n   it(\"2 ^ 10\", () => {\n     expect(runner(\"2 ^ 10\")).toEqual(1024);\n   });\n-  it(\"2 ^ 3 + 4 ^ 2 * 2\", () => {\n-    expect(runner(\"2 ^ 3 + 4 ^ 2 * 2\")).toEqual(40);\n-  });\n });\n \n describe(\"Runner tripled/mixed cases\", () => {\n   it(\"2 * 2 * 3\", () => {\n@@ -47,5 +44,9 @@\n \n   it(\"20 - 10 * 10 / 5 - 3\", () => {\n     expect(runner(\"20 - 10 * 10 / 5 - 3\")).toEqual(-3);\n   });\n+\n+  it(\"2 ^ 3 + 4 ^ 2 * 2\", () => {\n+    expect(runner(\"2 ^ 3 + 4 ^ 2 * 2\")).toEqual(40);\n+  });\n });\n"
+                },
+                {
+                    "date": 1643548445901,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,8 +20,11 @@\n   });\n   it(\"2 ^ 10\", () => {\n     expect(runner(\"2 ^ 10\")).toEqual(1024);\n   });\n+  it(\"4 **\", () => {\n+    expect(runner(\"4 **\")).toEqual(16);\n+  });\n });\n \n describe(\"Runner tripled/mixed cases\", () => {\n   it(\"2 * 2 * 3\", () => {\n"
+                },
+                {
+                    "date": 1643551178560,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,8 +23,11 @@\n   });\n   it(\"4 **\", () => {\n     expect(runner(\"4 **\")).toEqual(16);\n   });\n+  it(\"! 4\", () => {\n+    expect(runner(\"! 4\")).toEqual(16);\n+  });\n });\n \n describe(\"Runner tripled/mixed cases\", () => {\n   it(\"2 * 2 * 3\", () => {\n"
+                },
+                {
+                    "date": 1643551194110,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,9 +24,9 @@\n   it(\"4 **\", () => {\n     expect(runner(\"4 **\")).toEqual(16);\n   });\n   it(\"! 4\", () => {\n-    expect(runner(\"! 4\")).toEqual(16);\n+    expect(runner(\"! 4\")).toEqual(24);\n   });\n });\n \n describe(\"Runner tripled/mixed cases\", () => {\n"
+                },
+                {
+                    "date": 1643551550803,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -54,5 +54,11 @@\n \n   it(\"2 ^ 3 + 4 ^ 2 * 2\", () => {\n     expect(runner(\"2 ^ 3 + 4 ^ 2 * 2\")).toEqual(40);\n   });\n+\n+  it(\"( 12 + ( 1 + ( 2 - 3 ) * 4 ) + ( 5 * 6 ) ) + 12 * ( 2 + 1 )\", () => {\n+    expect(\n+      runner(\"( 12 + ( 1 + ( 2 - 3 ) * 4 ) + ( 5 * 6 ) ) + 12 * ( 2 + 1 )\")\n+    ).toEqual(75);\n+  });\n });\n"
+                },
+                {
+                    "date": 1643551695315,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -55,10 +55,12 @@\n   it(\"2 ^ 3 + 4 ^ 2 * 2\", () => {\n     expect(runner(\"2 ^ 3 + 4 ^ 2 * 2\")).toEqual(40);\n   });\n \n-  it(\"( 12 + ( 1 + ( 2 - 3 ) * 4 ) + ( 5 * 6 ) ) + 12 * ( 2 + 1 )\", () => {\n+  it(\"( 2 ^ 3 + ( 1 + ( 2 - 3 ) * 2** ) + ( 5 * ! 3 ) ) + 12 * ( 2 + 1 )\", () => {\n     expect(\n-      runner(\"( 12 + ( 1 + ( 2 - 3 ) * 4 ) + ( 5 * 6 ) ) + 12 * ( 2 + 1 )\")\n+      runner(\n+        \"( 2 ^ 3 + ( 1 + ( 2 - 3 ) * 2** ) + ( 5 * ! 3 ) ) + 12 * ( 2 + 1 )\"\n+      )\n     ).toEqual(75);\n   });\n });\n"
+                },
+                {
+                    "date": 1643551769787,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -60,7 +60,7 @@\n     expect(\n       runner(\n         \"( 2 ^ 3 + ( 1 + ( 2 - 3 ) * 2** ) + ( 5 * ! 3 ) ) + 12 * ( 2 + 1 )\"\n       )\n-    ).toEqual(75);\n+    ).toEqual(71);\n   });\n });\n"
+                },
+                {
+                    "date": 1643553037291,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -55,12 +55,12 @@\n   it(\"2 ^ 3 + 4 ^ 2 * 2\", () => {\n     expect(runner(\"2 ^ 3 + 4 ^ 2 * 2\")).toEqual(40);\n   });\n \n-  it(\"( 2 ^ 3 + ( 1 + ( 2 - 3 ) * 2** ) + ( 5 * ! 3 ) ) + 12 * ( 2 + 1 )\", () => {\n+  it(\"( 2 ^ 3 + ( 1 + ( 2 - 3 ) * 2 ** ) + ( 5 * ! 3 ) ) + 12 * ( 2 + 1 )\", () => {\n     expect(\n       runner(\n-        \"( 2 ^ 3 + ( 1 + ( 2 - 3 ) * 2** ) + ( 5 * ! 3 ) ) + 12 * ( 2 + 1 )\"\n+        \"( 2 ^ 3 + ( 1 + ( 2 - 3 ) * 2 ** ) + ( 5 * ! 3 ) ) + 12 * ( 2 + 1 )\"\n       )\n     ).toEqual(71);\n   });\n });\n"
+                }
+            ],
+            "date": 1643467891847,
+            "name": "Commit-0",
+            "content": "import { runner } from \"./runner\";\n\ndescribe(\"Baskets\", () => {\n  it(\"(1 + 32) * (3 + 8)\", () => {\n    expect(runner(\"1 * 32\")).toEqual(32);\n  });\n\ndescribe(\"Runner simple cases\", () => {\n  it(\"1 * 32\", () => {\n    expect(runner(\"1 * 32\")).toEqual(32);\n  });\n\n  it(\"2 * 32\", () => {\n    expect(runner(\"2 * 32\")).toEqual(64);\n  });\n\n  it(\"2 + 32\", () => {\n    expect(runner(\"2 + 32\")).toEqual(34);\n  });\n});\n\ndescribe(\"Runner tripled/mixed cases\", () => {\n  it(\"2 * 2 * 3\", () => {\n    expect(runner(\"2 * 2 * 3\")).toEqual(12);\n  });\n\n  it(\"2 * 2 + 3\", () => {\n    expect(runner(\"2 * 2 + 3\")).toEqual(7);\n  });\n\n  it(\"2 + 2 * 3\", () => {\n    expect(runner(\"2 + 2 * 3\")).toEqual(8);\n  });\n});\n\ndescribe(\"Runner long cases\", () => {\n  it(\"20 + 1 * 10 - 5 * 3\", () => {\n    expect(runner(\"20 + 1 * 10 - 5 * 3\")).toEqual(15);\n  });\n\n  it(\"20 - 10 * 10 / 5 - 3\", () => {\n    expect(runner(\"20 - 10 * 10 / 5 - 3\")).toEqual(-3);\n  });\n});\n"
+        }
+    ]
+}

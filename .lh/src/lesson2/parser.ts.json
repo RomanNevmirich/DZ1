@@ -1,0 +1,138 @@
+{
+    "sourceFile": "src/lesson2/parser.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 30,
+            "patches": [
+                {
+                    "date": 1643474032646,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1643478037863,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,8 +2,12 @@\n import { mathOperators } from \"./mathOperators\";\n \n export type ParsedLineType = (number | string)[];\n \n+const GetCloseBasket = (): number => {\n+  return 0;\n+};\n+\n export const parser = (line: string): ParsedLineType | null => {\n   const stack = line.split(\" \");\n \n   return stack.reduce<ParsedLineType>((result, item, key) => {\n"
+                },
+                {
+                    "date": 1643479977728,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,10 +2,23 @@\n import { mathOperators } from \"./mathOperators\";\n \n export type ParsedLineType = (number | string)[];\n \n-const GetCloseBasket = (): number => {\n-  return 0;\n+const GetCloseBasket = (line: string, position: number): number => {\n+  let ob = line.indexOf(\"(\", position + 1);\n+  let cb = line.indexOf(\")\", position + 1);\n+  if (cb == -1) throw new TypeError(\"Unexpected string\");\n+  else if (cb < ob) {\n+    return cb;\n+  } else {\n+    let bcount = 1;\n+    while (bcount > 0) {\n+      ob = line.indexOf(\"(\", Math.min(ob, cb) + 1);\n+      cb = line.indexOf(\")\", Math.min(ob, cb) + 1);\n+      bcount = bcount + (ob < cb ? 1 : -1);\n+    }\n+    return 0;\n+  }\n };\n \n export const parser = (line: string): ParsedLineType | null => {\n   const stack = line.split(\" \");\n"
+                },
+                {
+                    "date": 1643480332835,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,8 +20,11 @@\n   }\n };\n \n export const parser = (line: string): ParsedLineType | null => {\n+  const startBasket: number = line.indexOf(\"(\");\n+  if (startBasket != -1) console.log(GetCloseBasket(line, startBasket));\n+\n   const stack = line.split(\" \");\n \n   return stack.reduce<ParsedLineType>((result, item, key) => {\n     const prevItem = stack[key - 1];\n"
+                },
+                {
+                    "date": 1643481974084,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,22 +3,21 @@\n \n export type ParsedLineType = (number | string)[];\n \n const GetCloseBasket = (line: string, position: number): number => {\n-  let ob = line.indexOf(\"(\", position + 1);\n-  let cb = line.indexOf(\")\", position + 1);\n-  if (cb == -1) throw new TypeError(\"Unexpected string\");\n-  else if (cb < ob) {\n-    return cb;\n-  } else {\n-    let bcount = 1;\n-    while (bcount > 0) {\n-      ob = line.indexOf(\"(\", Math.min(ob, cb) + 1);\n-      cb = line.indexOf(\")\", Math.min(ob, cb) + 1);\n+  let bcount = 1;\n+  let ob: number;\n+  let cb = -1;\n+  while (bcount > 0 && position > 0) {\n+    ob = line.indexOf(\"(\", position + 1);\n+    cb = line.indexOf(\")\", position + 1);\n+    if (cb == -1) throw new TypeError(\"Parse fail\");\n+    else {\n+      position = Math.min(ob, cb);\n       bcount = bcount + (ob < cb ? 1 : -1);\n     }\n-    return 0;\n   }\n+  return cb;\n };\n \n export const parser = (line: string): ParsedLineType | null => {\n   const startBasket: number = line.indexOf(\"(\");\n"
+                },
+                {
+                    "date": 1643483013351,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,19 +2,19 @@\n import { mathOperators } from \"./mathOperators\";\n \n export type ParsedLineType = (number | string)[];\n \n-const GetCloseBasket = (line: string, position: number): number => {\n+const ShiftStack = (stack: string[], position: number) => {\n   let bcount = 1;\n   let ob: number;\n   let cb = -1;\n   while (bcount > 0 && position > 0) {\n-    ob = line.indexOf(\"(\", position + 1);\n-    cb = line.indexOf(\")\", position + 1);\n+    ob = stack.indexOf(\"(\", position + 1);\n+    cb = stack.indexOf(\")\", position + 1);\n     if (cb == -1) throw new TypeError(\"Parse fail\");\n     else {\n-      position = Math.min(ob, cb);\n-      bcount = bcount + (ob < cb ? 1 : -1);\n+      bcount = bcount + (ob < cb && ob > 0 ? 1 : -1);\n+      position = ob < cb && ob > 0 ? ob : cb;\n     }\n   }\n   return cb;\n };\n"
+                },
+                {
+                    "date": 1643483207976,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,29 +1,28 @@\n import { isNumber } from \"./helpers\";\n import { mathOperators } from \"./mathOperators\";\n \n-export type ParsedLineType = (number | string)[];\n+export type ParsedLineType = (number | string | string[])[];\n \n const ShiftStack = (stack: string[], position: number) => {\n   let bcount = 1;\n   let ob: number;\n   let cb = -1;\n-  while (bcount > 0 && position > 0) {\n-    ob = stack.indexOf(\"(\", position + 1);\n-    cb = stack.indexOf(\")\", position + 1);\n+  let m = position;\n+  while (bcount > 0 && m > 0) {\n+    ob = stack.indexOf(\"(\", m + 1);\n+    cb = stack.indexOf(\")\", m + 1);\n     if (cb == -1) throw new TypeError(\"Parse fail\");\n     else {\n       bcount = bcount + (ob < cb && ob > 0 ? 1 : -1);\n-      position = ob < cb && ob > 0 ? ob : cb;\n+      m = ob < cb && ob > 0 ? ob : cb;\n     }\n   }\n   return cb;\n+  stack = stack.slice(position + 1, cb + 1);\n };\n \n export const parser = (line: string): ParsedLineType | null => {\n-  const startBasket: number = line.indexOf(\"(\");\n-  if (startBasket != -1) console.log(GetCloseBasket(line, startBasket));\n-\n   const stack = line.split(\" \");\n \n   return stack.reduce<ParsedLineType>((result, item, key) => {\n     const prevItem = stack[key - 1];\n"
+                },
+                {
+                    "date": 1643483354267,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import { isNumber } from \"./helpers\";\n+import { isNumber, isOpenBasket } from \"./helpers\";\n import { mathOperators } from \"./mathOperators\";\n \n export type ParsedLineType = (number | string | string[])[];\n \n@@ -26,15 +26,18 @@\n \n   return stack.reduce<ParsedLineType>((result, item, key) => {\n     const prevItem = stack[key - 1];\n \n+    const isBasket = isOpenBasket(item);\n     const isValidNumberPush = !isNumber(prevItem) && isNumber(item);\n     const isValidOperatorPush =\n       isNumber(prevItem) &&\n       !isNumber(item) &&\n       mathOperators.hasOwnProperty(item);\n \n-    if (isValidNumberPush) {\n+    if (isBasket) {\n+      ShiftStack(stack, key);\n+    } else if (isValidNumberPush) {\n       result.push(Number(item));\n     } else if (isValidOperatorPush) {\n       result.push(item);\n     } else {\n"
+                },
+                {
+                    "date": 1643483699454,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n import { mathOperators } from \"./mathOperators\";\n \n export type ParsedLineType = (number | string | string[])[];\n \n-const ShiftStack = (stack: string[], position: number) => {\n+const ShiftStack = (stack: string[], position: number): number => {\n   let bcount = 1;\n   let ob: number;\n   let cb = -1;\n   let m = position;\n@@ -17,9 +17,8 @@\n       m = ob < cb && ob > 0 ? ob : cb;\n     }\n   }\n   return cb;\n-  stack = stack.slice(position + 1, cb + 1);\n };\n \n export const parser = (line: string): ParsedLineType | null => {\n   const stack = line.split(\" \");\n"
+                },
+                {
+                    "date": 1643484350843,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,10 +1,10 @@\n-import { isNumber, isOpenBasket } from \"./helpers\";\n+import { isNumber, isOpenBracket } from \"./helpers\";\n import { mathOperators } from \"./mathOperators\";\n \n export type ParsedLineType = (number | string | string[])[];\n \n-const ShiftStack = (stack: string[], position: number): number => {\n+const GetBracketEnd = (stack: string[], position: number): number => {\n   let bcount = 1;\n   let ob: number;\n   let cb = -1;\n   let m = position;\n@@ -25,17 +25,20 @@\n \n   return stack.reduce<ParsedLineType>((result, item, key) => {\n     const prevItem = stack[key - 1];\n \n-    const isBasket = isOpenBasket(item);\n+    const isBracket = isOpenBracket(item);\n     const isValidNumberPush = !isNumber(prevItem) && isNumber(item);\n     const isValidOperatorPush =\n       isNumber(prevItem) &&\n       !isNumber(item) &&\n       mathOperators.hasOwnProperty(item);\n \n-    if (isBasket) {\n-      ShiftStack(stack, key);\n+    if (isBracket) {\n+      const bE = GetBracketEnd(stack, key);\n+      const nstack = parser(stack.slice(key + 1, bE - 1).join(\" \"));\n+      stack.splice(key, bE - key + 1);\n+      result.push(nstack);\n     } else if (isValidNumberPush) {\n       result.push(Number(item));\n     } else if (isValidOperatorPush) {\n       result.push(item);\n"
+                },
+                {
+                    "date": 1643484426092,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,9 +19,9 @@\n   }\n   return cb;\n };\n \n-export const parser = (line: string): ParsedLineType | null => {\n+export const parser = (line: string): ParsedLineType | null | string[] => {\n   const stack = line.split(\" \");\n \n   return stack.reduce<ParsedLineType>((result, item, key) => {\n     const prevItem = stack[key - 1];\n"
+                },
+                {
+                    "date": 1643484605964,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -34,9 +34,9 @@\n       mathOperators.hasOwnProperty(item);\n \n     if (isBracket) {\n       const bE = GetBracketEnd(stack, key);\n-      const nstack = parser(stack.slice(key + 1, bE - 1).join(\" \"));\n+      const nstack = parser(stack.slice(key + 1, bE - 1).join(\" \")) ?? \"\";\n       stack.splice(key, bE - key + 1);\n       result.push(nstack);\n     } else if (isValidNumberPush) {\n       result.push(Number(item));\n"
+                },
+                {
+                    "date": 1643484694726,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import { isNumber, isOpenBracket } from \"./helpers\";\n import { mathOperators } from \"./mathOperators\";\n \n-export type ParsedLineType = (number | string | string[])[];\n+export type ParsedLineType = (number | string)[];\n \n const GetBracketEnd = (stack: string[], position: number): number => {\n   let bcount = 1;\n   let ob: number;\n@@ -34,11 +34,11 @@\n       mathOperators.hasOwnProperty(item);\n \n     if (isBracket) {\n       const bE = GetBracketEnd(stack, key);\n-      const nstack = parser(stack.slice(key + 1, bE - 1).join(\" \")) ?? \"\";\n+      const nstack = parser(stack.slice(key + 1, bE - 1).join(\" \"));\n       stack.splice(key, bE - key + 1);\n-      result.push(nstack);\n+      result.push(nstack ?? ['', '']);\n     } else if (isValidNumberPush) {\n       result.push(Number(item));\n     } else if (isValidOperatorPush) {\n       result.push(item);\n"
+                },
+                {
+                    "date": 1643485171369,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import { isNumber, isOpenBracket } from \"./helpers\";\n import { mathOperators } from \"./mathOperators\";\n \n-export type ParsedLineType = (number | string)[];\n+export type ParsedLineType = any; //(number | string | string[])[];\n \n const GetBracketEnd = (stack: string[], position: number): number => {\n   let bcount = 1;\n   let ob: number;\n@@ -19,9 +19,9 @@\n   }\n   return cb;\n };\n \n-export const parser = (line: string): ParsedLineType | null | string[] => {\n+export const parser = (line: string): ParsedLineType => {\n   const stack = line.split(\" \");\n \n   return stack.reduce<ParsedLineType>((result, item, key) => {\n     const prevItem = stack[key - 1];\n@@ -34,11 +34,11 @@\n       mathOperators.hasOwnProperty(item);\n \n     if (isBracket) {\n       const bE = GetBracketEnd(stack, key);\n-      const nstack = parser(stack.slice(key + 1, bE - 1).join(\" \"));\n+      const nresult = parser(stack.slice(key + 1, bE - 1).join(\" \"));\n       stack.splice(key, bE - key + 1);\n-      result.push(nstack ?? ['', '']);\n+      result.push(nresult);\n     } else if (isValidNumberPush) {\n       result.push(Number(item));\n     } else if (isValidOperatorPush) {\n       result.push(item);\n"
+                },
+                {
+                    "date": 1643485457655,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import { isNumber, isOpenBracket } from \"./helpers\";\n import { mathOperators } from \"./mathOperators\";\n \n-export type ParsedLineType = any; //(number | string | string[])[];\n+export type ParsedLineType = (number | string)[];\n \n const GetBracketEnd = (stack: string[], position: number): number => {\n   let bcount = 1;\n   let ob: number;\n@@ -19,9 +19,9 @@\n   }\n   return cb;\n };\n \n-export const parser = (line: string): ParsedLineType => {\n+export const parser = (line: string): ParsedLineType | null => {\n   const stack = line.split(\" \");\n \n   return stack.reduce<ParsedLineType>((result, item, key) => {\n     const prevItem = stack[key - 1];\n@@ -34,11 +34,11 @@\n       mathOperators.hasOwnProperty(item);\n \n     if (isBracket) {\n       const bE = GetBracketEnd(stack, key);\n-      const nresult = parser(stack.slice(key + 1, bE - 1).join(\" \"));\n-      stack.splice(key, bE - key + 1);\n-      result.push(nresult);\n+      /*const nstack = parser(stack.slice(key + 1, bE - 1).join(\" \"));\n+      stack.splice(key, bE - key + 1);*/\n+      result.push(stack.slice(key + 1, bE - 1).join(\" \"));\n     } else if (isValidNumberPush) {\n       result.push(Number(item));\n     } else if (isValidOperatorPush) {\n       result.push(item);\n"
+                },
+                {
+                    "date": 1643485517781,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,8 +37,9 @@\n       const bE = GetBracketEnd(stack, key);\n       /*const nstack = parser(stack.slice(key + 1, bE - 1).join(\" \"));\n       stack.splice(key, bE - key + 1);*/\n       result.push(stack.slice(key + 1, bE - 1).join(\" \"));\n+      console.log(result);\n     } else if (isValidNumberPush) {\n       result.push(Number(item));\n     } else if (isValidOperatorPush) {\n       result.push(item);\n"
+                },
+                {
+                    "date": 1643485787816,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n   let bcount = 1;\n   let ob: number;\n   let cb = -1;\n   let m = position;\n-  while (bcount > 0 && m > 0) {\n+  while (bcount > 0 && m > -1) {\n     ob = stack.indexOf(\"(\", m + 1);\n     cb = stack.indexOf(\")\", m + 1);\n     if (cb == -1) throw new TypeError(\"Parse fail\");\n     else {\n"
+                },
+                {
+                    "date": 1643485975102,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,9 +36,10 @@\n     if (isBracket) {\n       const bE = GetBracketEnd(stack, key);\n       /*const nstack = parser(stack.slice(key + 1, bE - 1).join(\" \"));\n       stack.splice(key, bE - key + 1);*/\n-      result.push(stack.slice(key + 1, bE - 1).join(\" \"));\n+      result.push(stack.slice(key + 1, bE).join(\" \"));\n+      stack.splice(key, bE - key + 1);\n       console.log(result);\n     } else if (isValidNumberPush) {\n       result.push(Number(item));\n     } else if (isValidOperatorPush) {\n"
+                },
+                {
+                    "date": 1643486160505,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,9 +37,9 @@\n       const bE = GetBracketEnd(stack, key);\n       /*const nstack = parser(stack.slice(key + 1, bE - 1).join(\" \"));\n       stack.splice(key, bE - key + 1);*/\n       result.push(stack.slice(key + 1, bE).join(\" \"));\n-      stack.splice(key, bE - key + 1);\n+      stack.splice(key, bE - key);\n       console.log(result);\n     } else if (isValidNumberPush) {\n       result.push(Number(item));\n     } else if (isValidOperatorPush) {\n"
+                },
+                {
+                    "date": 1643486308866,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-import { isNumber, isOpenBracket } from \"./helpers\";\n+import { isNumber, isOpenBracket, isCloseBracket } from \"./helpers\";\n import { mathOperators } from \"./mathOperators\";\n \n export type ParsedLineType = (number | string)[];\n \n@@ -25,16 +25,15 @@\n \n   return stack.reduce<ParsedLineType>((result, item, key) => {\n     const prevItem = stack[key - 1];\n \n-    const isBracket = isOpenBracket(item);\n     const isValidNumberPush = !isNumber(prevItem) && isNumber(item);\n     const isValidOperatorPush =\n-      isNumber(prevItem) &&\n+      (isNumber(prevItem) || isCloseBracket(prevItem)) &&\n       !isNumber(item) &&\n       mathOperators.hasOwnProperty(item);\n \n-    if (isBracket) {\n+    if (isOpenBracket(item)) {\n       const bE = GetBracketEnd(stack, key);\n       /*const nstack = parser(stack.slice(key + 1, bE - 1).join(\" \"));\n       stack.splice(key, bE - key + 1);*/\n       result.push(stack.slice(key + 1, bE).join(\" \"));\n"
+                },
+                {
+                    "date": 1643486489768,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,9 +37,8 @@\n       /*const nstack = parser(stack.slice(key + 1, bE - 1).join(\" \"));\n       stack.splice(key, bE - key + 1);*/\n       result.push(stack.slice(key + 1, bE).join(\" \"));\n       stack.splice(key, bE - key);\n-      console.log(result);\n     } else if (isValidNumberPush) {\n       result.push(Number(item));\n     } else if (isValidOperatorPush) {\n       result.push(item);\n"
+                },
+                {
+                    "date": 1643488796451,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -33,10 +33,8 @@\n       mathOperators.hasOwnProperty(item);\n \n     if (isOpenBracket(item)) {\n       const bE = GetBracketEnd(stack, key);\n-      /*const nstack = parser(stack.slice(key + 1, bE - 1).join(\" \"));\n-      stack.splice(key, bE - key + 1);*/\n       result.push(stack.slice(key + 1, bE).join(\" \"));\n       stack.splice(key, bE - key);\n     } else if (isValidNumberPush) {\n       result.push(Number(item));\n"
+                },
+                {
+                    "date": 1643548947303,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,10 @@\n-import { isNumber, isOpenBracket, isCloseBracket } from \"./helpers\";\n+import {\n+  isNumber,\n+  isOpenBracket,\n+  isCloseBracket,\n+  isFactorial,\n+} from \"./helpers\";\n import { mathOperators } from \"./mathOperators\";\n \n export type ParsedLineType = (number | string)[];\n \n"
+                },
+                {
+                    "date": 1643549280377,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,8 +30,11 @@\n \n   return stack.reduce<ParsedLineType>((result, item, key) => {\n     const prevItem = stack[key - 1];\n \n+    const isValidFactorialPush =\n+      prevItem == undefined ||\n+      (mathOperators.hasOwnProperty(prevItem) && !isFactorial(prevItem));\n     const isValidNumberPush = !isNumber(prevItem) && isNumber(item);\n     const isValidOperatorPush =\n       (isNumber(prevItem) || isCloseBracket(prevItem)) &&\n       !isNumber(item) &&\n"
+                },
+                {
+                    "date": 1643549310384,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -45,9 +45,9 @@\n       result.push(stack.slice(key + 1, bE).join(\" \"));\n       stack.splice(key, bE - key);\n     } else if (isValidNumberPush) {\n       result.push(Number(item));\n-    } else if (isValidOperatorPush) {\n+    } else if (isValidOperatorPush || isValidFactorialPush) {\n       result.push(item);\n     } else {\n       throw new TypeError(\"Unexpected string\");\n     }\n"
+                },
+                {
+                    "date": 1643549500804,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,11 @@\n     const prevItem = stack[key - 1];\n \n     const isValidFactorialPush =\n       prevItem == undefined ||\n-      (mathOperators.hasOwnProperty(prevItem) && !isFactorial(prevItem));\n+      (mathOperators.hasOwnProperty(prevItem) &&\n+        !isFactorial(prevItem) &&\n+        isFactorial(Item));\n     const isValidNumberPush = !isNumber(prevItem) && isNumber(item);\n     const isValidOperatorPush =\n       (isNumber(prevItem) || isCloseBracket(prevItem)) &&\n       !isNumber(item) &&\n"
+                },
+                {
+                    "date": 1643549615683,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,12 +31,11 @@\n   return stack.reduce<ParsedLineType>((result, item, key) => {\n     const prevItem = stack[key - 1];\n \n     const isValidFactorialPush =\n-      prevItem == undefined ||\n-      (mathOperators.hasOwnProperty(prevItem) &&\n-        !isFactorial(prevItem) &&\n-        isFactorial(Item));\n+      isFactorial(Item) &&\n+      (prevItem == undefined ||\n+        (mathOperators.hasOwnProperty(prevItem) && !isFactorial(prevItem)));\n     const isValidNumberPush = !isNumber(prevItem) && isNumber(item);\n     const isValidOperatorPush =\n       (isNumber(prevItem) || isCloseBracket(prevItem)) &&\n       !isNumber(item) &&\n"
+                },
+                {
+                    "date": 1643549752085,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n   return stack.reduce<ParsedLineType>((result, item, key) => {\n     const prevItem = stack[key - 1];\n \n     const isValidFactorialPush =\n-      isFactorial(Item) &&\n+      isFactorial(item) &&\n       (prevItem == undefined ||\n         (mathOperators.hasOwnProperty(prevItem) && !isFactorial(prevItem)));\n     const isValidNumberPush = !isNumber(prevItem) && isNumber(item);\n     const isValidOperatorPush =\n"
+                },
+                {
+                    "date": 1643549834732,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -38,9 +38,9 @@\n     const isValidNumberPush = !isNumber(prevItem) && isNumber(item);\n     const isValidOperatorPush =\n       (isNumber(prevItem) || isCloseBracket(prevItem)) &&\n       !isNumber(item) &&\n-      mathOperators.hasOwnProperty(item);\n+      mathOperators.hasOwnProperty(item) && !isFactorial(item);\n \n     if (isOpenBracket(item)) {\n       const bE = GetBracketEnd(stack, key);\n       result.push(stack.slice(key + 1, bE).join(\" \"));\n"
+                },
+                {
+                    "date": 1643549844541,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -38,9 +38,10 @@\n     const isValidNumberPush = !isNumber(prevItem) && isNumber(item);\n     const isValidOperatorPush =\n       (isNumber(prevItem) || isCloseBracket(prevItem)) &&\n       !isNumber(item) &&\n-      mathOperators.hasOwnProperty(item) && !isFactorial(item);\n+      mathOperators.hasOwnProperty(item) &&\n+      !isFactorial(item);\n \n     if (isOpenBracket(item)) {\n       const bE = GetBracketEnd(stack, key);\n       result.push(stack.slice(key + 1, bE).join(\" \"));\n"
+                },
+                {
+                    "date": 1643552900913,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,9 +25,9 @@\n   return cb;\n };\n \n export const parser = (line: string): ParsedLineType | null => {\n-  const stack = line.split(\" \");\n+  const stack = line.replace(\"**\", \"^ 2\").split(\" \");\n \n   return stack.reduce<ParsedLineType>((result, item, key) => {\n     const prevItem = stack[key - 1];\n \n"
+                }
+            ],
+            "date": 1643474032646,
+            "name": "Commit-0",
+            "content": "import { isNumber } from \"./helpers\";\nimport { mathOperators } from \"./mathOperators\";\n\nexport type ParsedLineType = (number | string)[];\n\nexport const parser = (line: string): ParsedLineType | null => {\n  const stack = line.split(\" \");\n\n  return stack.reduce<ParsedLineType>((result, item, key) => {\n    const prevItem = stack[key - 1];\n\n    const isValidNumberPush = !isNumber(prevItem) && isNumber(item);\n    const isValidOperatorPush =\n      isNumber(prevItem) &&\n      !isNumber(item) &&\n      mathOperators.hasOwnProperty(item);\n\n    if (isValidNumberPush) {\n      result.push(Number(item));\n    } else if (isValidOperatorPush) {\n      result.push(item);\n    } else {\n      throw new TypeError(\"Unexpected string\");\n    }\n    return result;\n  }, []);\n};\n"
+        }
+    ]
+}
